@@ -30,10 +30,9 @@
 
 ### 3.1 模块划分
 
-
-1.  **CLI Entrypoint (`cli.py`)**: 位于根目录。负责解析参数，调用 ProxyManager 启动服务，然后调用 Orchestrator。
+1.  **CLI Entrypoint (`multi_claude_code_agent/cli.py`)**: 负责解析参数，调用 ProxyManager 启动服务，然后调用 Orchestrator。
 2.  **Proxy Manager (`core/proxy_manager.py`)**: **[新增]** 负责管理 `ccc` 代理进程的生命周期（启动、健康检查、优雅关闭）。
-3.  **Config Manager (`config/manager.py`)**: 负责读取和验证 Agent 配置。
+3.  **Config Manager (`config/`)**: 负责读取和验证 Agent 配置。
 4.  **Agent Orchestrator (`core/orchestrator.py`)**: 负责并发初始化和执行多个 Agent 任务。
 5.  **Agent Wrapper (`core/agent.py`)**: 封装 `claude-agent-sdk` 的调用逻辑。
 6.  **Output Formatter (`utils/formatter.py`)**: 负责汇总展示结果。
@@ -85,8 +84,7 @@ User Input (CLI) -> Config Loader -> **Start Proxies (Proxy Manager)** -> **Wait
 
 ```python
 # 伪代码示例
-from claude_agent_sdk import ClaudeAgentOptions, ClaudeSDKClient
-from claude_agent_sdk.types import AssistantMessage, TextBlock
+from claude_agent_sdk import ClaudeAgent, ClaudeAgentOptions
 
 async def run_single_agent(agent_config, user_query, cwd):
     try:
@@ -104,29 +102,15 @@ async def run_single_agent(agent_config, user_query, cwd):
             }
         )
 
-        full_response = []
+        agent = ClaudeAgent(options)
 
-        # 使用上下文管理器模式
-        async with ClaudeSDKClient(options=options) as client:
-            # 发送查询
-            await client.query(user_query)
-
-            # 处理响应，只关注 AssistantMessage 中的 TextBlock
-            async for message in client.receive_response():
-                if isinstance(message, AssistantMessage):
-                    for block in message.content:
-                        if isinstance(block, TextBlock):
-                            if block.text:
-                                full_response.append(block.text)
-
-            # 拼接所有文本作为最终结果
-            final_text = "".join(full_response)
-
-            return {
-                "model": agent_config["name"],
-                "status": "success",
-                "result": final_text
-            }
+        # 执行并返回结果
+        result = await agent.run(user_query)
+        return {
+            "model": agent_config["name"],
+            "status": "success",
+            "result": result
+        }
     except Exception as e:
         return {
             "model": agent_config["name"],
@@ -152,10 +136,10 @@ mca analyze "如何优化这段代码？" --cwd ./src
 
 ```toml
 [project.scripts]
-mca = "cli:main"
+mca = "multi_claude_code_agent.cli:main"
 ```
 
-意味着系统需要一个 `cli.py` 文件，其中包含一个 `main()` 函数作为入口点。
+这意味着系统需要一个 `multi_claude_code_agent/cli.py` 文件，其中包含一个 `main()` 函数作为入口点。
 
 #### 4.3.3 参数解析
 支持的子命令和参数：
@@ -219,6 +203,5 @@ mca = "cli:main"
 
 ## 6. 开发规范
 
-- **包管理**: 必须使用 `uv` 管理项目依赖。安装依赖请使用 `uv add <package>`，严禁使用 `pip`。
 - **常量**: 端口、默认 Prompt 等常量定义在 `constants/` 目录下。
 - **扩展性**: 代码结构应允许轻松添加新的模型配置，而无需修改核心逻辑。
