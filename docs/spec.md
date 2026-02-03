@@ -84,7 +84,8 @@ User Input (CLI) -> Config Loader -> **Start Proxies (Proxy Manager)** -> **Wait
 
 ```python
 # 伪代码示例
-from claude_agent_sdk import ClaudeAgent, ClaudeAgentOptions
+from claude_agent_sdk import ClaudeAgentOptions, ClaudeSDKClient
+from claude_agent_sdk.types import AssistantMessage, TextBlock
 
 async def run_single_agent(agent_config, user_query, cwd):
     try:
@@ -102,15 +103,29 @@ async def run_single_agent(agent_config, user_query, cwd):
             }
         )
 
-        agent = ClaudeAgent(options)
+        full_response = []
 
-        # 执行并返回结果
-        result = await agent.run(user_query)
-        return {
-            "model": agent_config["name"],
-            "status": "success",
-            "result": result
-        }
+        # 使用上下文管理器模式
+        async with ClaudeSDKClient(options=options) as client:
+            # 发送查询
+            await client.query(user_query)
+
+            # 处理响应，只关注 AssistantMessage 中的 TextBlock
+            async for message in client.receive_response():
+                if isinstance(message, AssistantMessage):
+                    for block in message.content:
+                        if isinstance(block, TextBlock):
+                            if block.text:
+                                full_response.append(block.text)
+
+            # 拼接所有文本作为最终结果
+            final_text = "".join(full_response)
+
+            return {
+                "model": agent_config["name"],
+                "status": "success",
+                "result": final_text
+            }
     except Exception as e:
         return {
             "model": agent_config["name"],
@@ -201,7 +216,7 @@ mca = "multi_claude_code_agent.cli:main"
 ### 5.2 外部命令依赖
 - 系统需安装 `ccc` 命令行工具，并确保在 PATH 中可用。
 
-## 6. 开发规范
-
+## 6. 开发规范  
+- **包管理**: 必须使用 `uv` 管理项目依赖。安装依赖请使用 `uv add <package>`，严禁使用 `pip`。  
 - **常量**: 端口、默认 Prompt 等常量定义在 `constants/` 目录下。
 - **扩展性**: 代码结构应允许轻松添加新的模型配置，而无需修改核心逻辑。
