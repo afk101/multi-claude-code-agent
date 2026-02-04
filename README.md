@@ -37,7 +37,12 @@ uv pip install -e .
 ```bash
 mca --version
 # 输出: mca 0.1.0
-```
+```  
+
+## 全局安装  
+```bash
+uv tool install --editable .
+```  
 
 ## 使用方法
 
