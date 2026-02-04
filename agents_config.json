@@ -3,25 +3,25 @@
     {
       "name": "copilotcode-13",
       "port": 4900,
-      "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
+      "system_prompt": "You are a professional analyst. Please provide a detailed and well-structured analysis for the issue, with a focus on proposing practical solutions. Express your thoughts in Chinese. Please note that you are strictly prohibited from modifying any code in the current workspace.",
       "enabled": true
     },
     {
       "name": "lyra-flash-6",
       "port": 4901,
-      "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
+      "system_prompt": "You are a professional analyst. Please provide a detailed and well-structured analysis for the issue, with a focus on proposing practical solutions. Express your thoughts in Chinese. Please note that you are strictly prohibited from modifying any code in the current workspace.",
       "enabled": true
     },
     {
       "name": "cortex-15",
       "port": 4902,
-      "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
+      "system_prompt": "You are a professional analyst. Please provide a detailed and well-structured analysis for the issue, with a focus on proposing practical solutions. Express your thoughts in Chinese. Please note that you are strictly prohibited from modifying any code in the current workspace.",
       "enabled": true
     },
     {
       "name": "cortex-12",
       "port": 4903,
-      "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
+      "system_prompt": "You are a professional analyst. Please provide a detailed and well-structured analysis for the issue, with a focus on proposing practical solutions. Express your thoughts in Chinese. Please note that you are strictly prohibited from modifying any code in the current workspace.",
       "enabled": true
     }
   ]
