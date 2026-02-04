@@ -1,0 +1,28 @@
+{
+  "agents": [
+    {
+      "name": "copilotcode-13",
+      "port": 4900,
+      "system_prompt": "You are an expert analyst powered by copilotcode-13. Provide comprehensive and well-structured analysis with a focus on practical solutions.",
+      "enabled": true
+    },
+    {
+      "name": "lyra-flash-6",
+      "port": 4901,
+      "system_prompt": "You are a fast and precise coding assistant powered by lyra-flash-6. Focus on quick, accurate responses with emphasis on code quality and best practices.",
+      "enabled": true
+    },
+    {
+      "name": "cortex-15",
+      "port": 4902,
+      "system_prompt": "You are a deep thinking architecture expert powered by cortex-15. Provide thorough analysis with consideration for system design, scalability, and maintainability.",
+      "enabled": true
+    },
+    {
+      "name": "cortex-12",
+      "port": 4903,
+      "system_prompt": "You are a balanced coding companion powered by cortex-12. Offer well-rounded perspectives combining practicality with technical excellence.",
+      "enabled": true
+    }
+  ]
+}
