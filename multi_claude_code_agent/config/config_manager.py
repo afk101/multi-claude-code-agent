@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-from ..constants import DEFAULT_PORTS, DEFAULT_SYSTEM_PROMPTS, DEFAULT_CONFIG_FILENAME
+from ..constants import DEFAULT_PORTS, DEFAULT_CONFIG_FILENAME
 
 
 class AgentConfig:
@@ -57,7 +57,7 @@ class AgentConfig:
         return cls(
             name=data["name"],
             port=data["port"],
-            system_prompt=data.get("system_prompt", DEFAULT_SYSTEM_PROMPTS.get(data["name"], "")),
+            system_prompt=data.get("system_prompt", ""),
             enabled=data.get("enabled", True),
         )
 
@@ -179,7 +179,7 @@ class ConfigManager:
                 {
                     "name": name,
                     "port": port,
-                    "system_prompt": DEFAULT_SYSTEM_PROMPTS.get(name, ""),
+                    "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
                     "enabled": True,
                 }
                 for name, port in DEFAULT_PORTS.items()

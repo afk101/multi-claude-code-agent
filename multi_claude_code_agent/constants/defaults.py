@@ -24,14 +24,6 @@ AGENT_EXECUTION_TIMEOUT = 500  # Agent 执行超时,单位s
 # 健康检查配置
 HEALTH_CHECK_MAX_RETRIES = 60  # 最大重试次数 (30秒 / 0.5秒)
 
-# 默认系统提示词
-DEFAULT_SYSTEM_PROMPTS = {
-    "copilotcode-13": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
-    "lyra-flash-6": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
-    "cortex-15": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
-    "cortex-12": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
-}
-
 # 模型固定值（实际模型由后端代理决定）
 FIXED_MODEL_NAME = "claude-opus-4.5"
 
