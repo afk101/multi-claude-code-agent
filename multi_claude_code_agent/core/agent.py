@@ -12,7 +12,7 @@ from claude_agent_sdk import ClaudeAgentOptions, ClaudeSDKClient
 from claude_agent_sdk.types import AssistantMessage, TextBlock
 
 from ..config.config_manager import AgentConfig
-from ..constants import AGENT_EXECUTION_TIMEOUT, FIXED_MODEL_NAME, PERMISSION_MODE
+from ..constants import AGENT_EXECUTION_TIMEOUT, FIXED_MODEL_NAME, PERMISSION_MODE, ALLOWED_TOOLS
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +55,8 @@ class AgentWrapper:
         """
         options = ClaudeAgentOptions(
             model=FIXED_MODEL_NAME,  # 固定值，实际模型由后端代理决定
-            permission_mode=PERMISSION_MODE,  # 仅进行计划和分析模式
+            permission_mode=PERMISSION_MODE,  # 设置为 acceptEdits 模式
+            allowed_tools=ALLOWED_TOOLS,  # 显式设置允许的工具
             system_prompt=self.agent_config.system_prompt,
             continue_conversation=False,
             cwd=self.cwd,

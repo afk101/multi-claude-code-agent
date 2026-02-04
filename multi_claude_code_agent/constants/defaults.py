@@ -36,7 +36,12 @@ DEFAULT_SYSTEM_PROMPTS = {
 FIXED_MODEL_NAME = "claude-opus-4.5"
 
 # 权限模式
-PERMISSION_MODE = "plan"
+PERMISSION_MODE = "acceptEdits"
+
+# 允许的工具列表
+ALLOWED_TOOLS = [
+    'Bash', 'Glob', 'Grep', 'Read', 'Edit', 'Write', 'BashOutput'
+]
 
 # CLI 相关常量
 CLI_COMMAND_NAME = "mca"

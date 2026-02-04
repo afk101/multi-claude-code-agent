@@ -92,7 +92,8 @@ async def run_single_agent(agent_config, user_query, cwd):
         # 构建 Agent 选项
         options = ClaudeAgentOptions(
             model="claude-opus-4.5",  # 固定值，实际模型由后端代理决定
-            permission_mode="plan",   # 仅进行计划和分析模式
+            permission_mode="acceptEdits",   # 设置为 acceptEdits 模式
+            allowed_tools=['Bash', 'Glob', 'Grep', 'Read', 'Edit', 'Write', 'BashOutput'], # 显式设置允许的工具
             system_prompt=agent_config["system_prompt"],
             continue_conversation=False,
             cwd=cwd,
