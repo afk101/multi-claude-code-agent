@@ -179,7 +179,7 @@ class ConfigManager:
                 {
                     "name": name,
                     "port": port,
-                    "system_prompt": "You are an expert analyst. Provide comprehensive and well-structured analysis with a focus on practical solutions, using Chinese.",
+                    "system_prompt": "You are a professional analyst. Please provide a detailed and well-structured analysis for the issue, with a focus on proposing practical solutions. Express your thoughts in Chinese. Please note that you are strictly prohibited from modifying any code in the current workspace.",
                     "enabled": True,
                 }
                 for name, port in DEFAULT_PORTS.items()
