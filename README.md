@@ -77,6 +77,9 @@ mca init
 
 # 或在当前目录生成配置文件
 mca init --output .
+
+# 注意：如果指定文件路径，文件名必须为 agents_config.json
+mca init --output ./custom_dir/agents_config.json
 ```
 
 
