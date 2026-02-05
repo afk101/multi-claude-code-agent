@@ -13,7 +13,7 @@ from pathlib import Path
 
 from . import __version__
 from .config.config_manager import ConfigManager
-from .constants import CLI_COMMAND_NAME
+from .constants import CLI_COMMAND_NAME, DEFAULT_CONFIG_FILENAME
 from .core.orchestrator import run_parallel_analysis
 from .core.proxy_manager import ProxyManager
 from .utils.formatter import format_results
@@ -76,7 +76,7 @@ def create_parser() -> argparse.ArgumentParser:
         "--output",
         type=str,
         default=None,
-        help="输出路径（默认：当前目录）",
+        help=f"输出路径（默认：~/.mca/{DEFAULT_CONFIG_FILENAME}）",
     )
 
     # version 子命令（作为子命令的替代方式）
@@ -107,16 +107,16 @@ async def run_analyze(args: argparse.Namespace) -> int:
         agents = config_manager.load()
         enabled_agents = config_manager.get_enabled_agents()
     except FileNotFoundError as e:
-        logger.error(f"配置加载失败: {e}")
+        logger.debug(f"配置加载失败: {e}")
         print(f"错误: {e}")
         return 1
     except ValueError as e:
-        logger.error(f"配置验证失败: {e}")
+        logger.debug(f"配置验证失败: {e}")
         print(f"错误: {e}")
         return 1
 
     if not enabled_agents:
-        logger.error("没有启用的 Agent")
+        logger.debug("没有启用的 Agent")
         print("错误: 配置中没有启用的 Agent")
         return 1
 
@@ -181,7 +181,7 @@ def run_init(args: argparse.Namespace) -> int:
         print(f"配置文件已创建: {output_path}")
         return 0
     except Exception as e:
-        logger.error(f"创建配置文件失败: {e}")
+        logger.debug(f"创建配置文件失败: {e}")
         print(f"错误: {e}")
         return 1
 

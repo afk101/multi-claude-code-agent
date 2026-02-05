@@ -182,6 +182,14 @@ class ConfigManager:
         """
         if output_path:
             path = Path(output_path)
+            # 如果路径是一个已存在的目录，则追加默认文件名
+            if path.is_dir():
+                path = path / DEFAULT_CONFIG_FILENAME
+
+            # 校验文件名必须匹配，否则程序无法加载
+            if path.name != DEFAULT_CONFIG_FILENAME:
+                raise ValueError(f"配置文件名必须为 '{DEFAULT_CONFIG_FILENAME}'，否则程序无法识别。请修改输出路径或仅指定目录。")
+
             # 如果指定了路径但目录不存在，尝试创建父目录
             if not path.parent.exists():
                 path.parent.mkdir(parents=True, exist_ok=True)

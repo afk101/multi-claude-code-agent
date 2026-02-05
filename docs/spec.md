@@ -44,6 +44,14 @@ User Input (CLI) -> Config Loader -> **Start Proxies (Proxy Manager)** -> **Wait
 
 ### 4.1 配置文件设计 (`config/agents_config.json`)
 
+#### 4.1.1 配置文件查找策略
+系统按以下优先级顺序查找配置文件：
+1. **当前工作目录**: `./agents_config.json` (或 `--cwd` 指定的目录下)
+2. **用户主目录**: `~/.mca/agents_config.json`
+3. **内置默认配置**: 包内自带的默认配置
+
+#### 4.1.2 配置内容示例
+
 ```json
 {
   "agents": [
@@ -161,8 +169,11 @@ mca = "multi_claude_code_agent.cli:main"
 支持的子命令和参数：
 - `analyze <prompt>`: 并发分析问题
   - `--cwd`: 指定工作目录 (可选，若未提供则默认继承当前终端执行时的路径)
-  - `--config`: 指定配置文件路径 (可选)
 - `init`: 初始化默认配置文件
+  - `--output`: 指定输出路径。
+    - 若未指定，默认生成至 `~/.mca/agents_config.json`。
+    - 若指定为目录（如 `.`），自动在该目录下生成 `agents_config.json`。
+    - 若指定为文件路径，文件名**必须**为 `agents_config.json`，否则将报错中断。
 - `version`: 显示版本信息
 
 #### 4.3.4 输出格式规范
