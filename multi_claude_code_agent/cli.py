@@ -62,12 +62,6 @@ def create_parser() -> argparse.ArgumentParser:
         help="指定工作目录（默认：当前目录）",
     )
     analyze_parser.add_argument(
-        "--config",
-        type=str,
-        default=None,
-        help="指定配置文件路径（默认：使用内置配置）",
-    )
-    analyze_parser.add_argument(
         "--no-summary",
         action="store_true",
         help="不显示执行摘要",
@@ -109,7 +103,7 @@ async def run_analyze(args: argparse.Namespace) -> int:
 
     # 加载配置
     try:
-        config_manager = ConfigManager(args.config)
+        config_manager = ConfigManager(cwd=cwd)
         agents = config_manager.load()
         enabled_agents = config_manager.get_enabled_agents()
     except FileNotFoundError as e:

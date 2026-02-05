@@ -69,26 +69,37 @@ class ConfigManager:
     负责加载、验证和管理 Agent 配置。
     """
 
-    def __init__(self, config_path: str | None = None):
+    def __init__(self, cwd: str | None = None):
         """
         初始化配置管理器。
 
-        :param config_path: 配置文件路径，如果为 None 则使用默认路径
+        :param cwd: 当前工作目录，用于查找局部配置文件
         """
-        self.config_path = self._resolve_config_path(config_path)
+        self.cwd = Path(cwd) if cwd else Path.cwd()
+        self.config_path = self._resolve_config_path()
         self.agents: list[AgentConfig] = []
 
-    def _resolve_config_path(self, config_path: str | None) -> Path:
+    def _resolve_config_path(self) -> Path:
         """
         解析配置文件路径。
+        优先级：
+        1. 当前工作目录 (--cwd 指定或默认为当前目录)
+        2. 用户主目录 (~/.mca/agents_config.json)
+        3. 包内默认配置
 
-        :param config_path: 用户指定的配置文件路径
         :return: 解析后的配置文件路径
         """
-        if config_path:
-            return Path(config_path)
+        # 1. 当前工作目录下的配置
+        local_config = self.cwd / DEFAULT_CONFIG_FILENAME
+        if local_config.exists():
+            return local_config
 
-        # 默认使用包内的配置文件
+        # 3. 检查用户主目录配置 ~/.mca/agents_config.json
+        user_config = Path.home() / ".mca" / DEFAULT_CONFIG_FILENAME
+        if user_config.exists():
+            return user_config
+
+        # 4. 默认使用包内的配置文件
         return Path(__file__).parent / DEFAULT_CONFIG_FILENAME
 
     def load(self) -> list[AgentConfig]:
@@ -166,13 +177,19 @@ class ConfigManager:
         """
         创建默认配置文件。
 
-        :param output_path: 输出路径，如果为 None 则输出到当前目录
+        :param output_path: 输出路径，如果为 None 则输出到 ~/.mca/agents_config.json
         :return: 创建的配置文件路径
         """
         if output_path:
             path = Path(output_path)
+            # 如果指定了路径但目录不存在，尝试创建父目录
+            if not path.parent.exists():
+                path.parent.mkdir(parents=True, exist_ok=True)
         else:
-            path = Path.cwd() / DEFAULT_CONFIG_FILENAME
+            # 默认路径改为 ~/.mca/agents_config.json
+            mca_dir = Path.home() / ".mca"
+            mca_dir.mkdir(parents=True, exist_ok=True)
+            path = mca_dir / DEFAULT_CONFIG_FILENAME
 
         default_config = {
             "agents": [
